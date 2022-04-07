@@ -1,18 +1,8 @@
-import { Container, createTheme, styled } from "@mui/material";
+import { Container, styled } from "@mui/material";
 
-export const mainContainerTheme = createTheme({
-  components: {
-    MuiContainer: {
-      styleOverrides: {
-        root: {
-          padding: "16px"
-        }
-      }
-    }
-  }
-});
+export type MainContainerProps = { children?: React.ReactNode | HTMLElement };
 
-export const CustomContainer = styled(Container)`
+export const CustomContainer = styled(Container)<MainContainerProps>`
   padding: 16px;
   height: 100vh;
 `;

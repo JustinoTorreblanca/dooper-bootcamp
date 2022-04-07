@@ -7,8 +7,9 @@ import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import { ThemeProvider } from "@mui/material/styles";
+import theme from "@src/theme";
 import * as Styles from "./styles";
-import { DooperLogo, menuTheme } from "./styles";
+import { DooperLogo } from "./styles";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -56,7 +57,7 @@ export default function Header() {
         </Hidden>
       </Box>
       <Hidden mdUp>
-        <ThemeProvider theme={menuTheme}>
+        <ThemeProvider theme={theme}>
           <IconButton
             edge="end"
             color="primary"

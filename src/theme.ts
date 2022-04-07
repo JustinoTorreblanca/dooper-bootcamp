@@ -122,8 +122,25 @@ const theme = createTheme({
       defaultProps: {
         color: "#483afe"
       }
+    },
+    MuiBackdrop: {
+      styleOverrides: {
+        root: {
+          top: "97px",
+          color: "#fff",
+          zIndex: 1
+        }
+      }
+    },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          padding: "16px"
+        }
+      }
     }
   },
+  spacing: 8,
   palette: {
     mode: "light",
     primary: {
@@ -136,7 +153,7 @@ const theme = createTheme({
       "700": "#2f2acc",
       "800": "#2924b3",
       "900": "#231f99",
-      main: "#3B34FF",
+      main: "#483afe",
       contrastText: "#FFFFFF",
       light: "#d8d6ff",
       dark: "#2924b3"

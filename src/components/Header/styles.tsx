@@ -1,5 +1,4 @@
 import { Button, styled } from "@mui/material";
-import { createTheme } from "@mui/material/styles";
 
 export const HeaderContainer = styled("div")`
   color: white;
@@ -13,8 +12,9 @@ export const HeaderContainer = styled("div")`
   position: relative;
   box-shadow: 0px 4px 4px 0px #00000040;
 `;
+type MenuListContainerProps = { display?: boolean | string | undefined };
 
-export const MenuListContainer = styled("div")`
+export const MenuListContainer = styled("div")<MenuListContainerProps>`
   width: 100%;
   height: 40vh;
   position: absolute;
@@ -44,26 +44,6 @@ export const CustomButton = styled(Button)`
     background-color: rgba(43, 52, 69, 0.04);
   }
 `;
-
-export const menuTheme = createTheme({
-  palette: {
-    primary: {
-      main: "#483afe"
-    }
-  },
-  components: {
-    MuiBackdrop: {
-      styleOverrides: {
-        root: {
-          top: "97px",
-          color: "#fff",
-          zIndex: 1
-        }
-      }
-    }
-  },
-  spacing: 8
-});
 
 export const DooperLogo = styled("div")`
   background-image: url("/_next/image?url=%2Fassets%2Flogo-dooper.png&w=384&q=75");

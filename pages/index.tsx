@@ -20,7 +20,7 @@ const Home: NextPage = () => {
 
       <main>
         <MainContainer>
-          <h1>Welcome to</h1>
+          <h1>Welcome to:</h1>
           <Image
             src="/_next/image?url=%2Fassets%2Flogo-dooper.png&w=384&q=75"
             alt="dooper"

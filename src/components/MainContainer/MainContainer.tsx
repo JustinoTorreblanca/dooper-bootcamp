@@ -1,17 +1,16 @@
 import React from "react";
 import { Box } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
+import theme from "@src/theme";
 import * as Styles from "./styles";
-import { mainContainerTheme } from "./styles";
+import { MainContainerProps } from "./styles";
 
-type MainContainerProps = {};
-
-function MainContainer({}: MainContainerProps) {
+function MainContainer({ children }: MainContainerProps) {
   return (
-    <ThemeProvider theme={mainContainerTheme}>
+    <ThemeProvider theme={theme}>
       <Styles.CustomContainer>
         <Styles.InnerContainer>
-          <Box>MAin container</Box>
+          <Box>{children}</Box>
         </Styles.InnerContainer>
       </Styles.CustomContainer>
     </ThemeProvider>
