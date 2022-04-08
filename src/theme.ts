@@ -217,6 +217,7 @@ const theme = createTheme({
       disabled: "#DAE1E7"
     },
     divider: "#F3F5F9",
+
     grey: {
       "50": "#fafafa",
       "100": "#F6F9FC",
@@ -485,6 +486,7 @@ const theme = createTheme({
   },
   shadows: [
     "none",
+    "0px 4px 4px 0px #00000040",
     "0px 1px 3px rgba(3, 0, 71, 0.09)",
     "0px 4px 16px rgba(43, 52, 69, 0.1)",
     "0px 8px 45px rgba(3, 0, 71, 0.09)",

@@ -6,10 +6,16 @@ import { Button, Hidden, Typography } from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import { ThemeProvider } from "@mui/material/styles";
-import theme from "@src/theme";
 import * as Styles from "./styles";
 import { DooperLogo } from "./styles";
+
+type PageProps = { name: string; href: string };
+
+const PAGES: PageProps[] = [
+  { name: "Login", href: "/login" },
+  { name: "Register", href: "/register" },
+  { name: "Profile", href: "/profile" }
+];
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -27,81 +33,47 @@ export default function Header() {
       </Link>
       <Box>
         <Hidden mdDown>
-          <Button color="inherit">
-            <Link href={"/login"}>
-              <a>
-                <Typography variant="h5" component="h2">
-                  Login
-                </Typography>
-              </a>
-            </Link>
-          </Button>
-          <Button color="inherit">
-            <Link href={"/register"}>
-              <a>
-                <Typography variant="h5" component="h2">
-                  Register
-                </Typography>
-              </a>
-            </Link>
-          </Button>
-          <Button color="inherit">
-            <Link href={"/profile"}>
-              <a>
-                <Typography variant="h5" component="h2">
-                  Profile
-                </Typography>
-              </a>
-            </Link>
-          </Button>
+          {PAGES.map((page) => (
+            <Button key={page.name}>
+              <Link href={page.href} passHref>
+                <a>
+                  <Typography variant="h5" component="h2">
+                    {page.name}
+                  </Typography>
+                </a>
+              </Link>
+            </Button>
+          ))}
         </Hidden>
       </Box>
       <Hidden mdUp>
-        <ThemeProvider theme={theme}>
-          <IconButton
-            edge="end"
-            color="primary"
-            aria-label="menu"
-            onClick={handleToggle}
-          >
-            <MenuIcon color="primary" fontSize="large" />
-          </IconButton>
-          <Backdrop open={open} onClick={handleToggle}>
-            <Styles.MenuListContainer
-              display={open === false ? "none" : "block"}
-            >
-              <Styles.MenuItems>
-                <Styles.CustomButton color="inherit">
-                  <Link href={"/login"}>
-                    <a>
-                      <Typography variant="h5" component="h2">
-                        Login
-                      </Typography>
-                    </a>
-                  </Link>
-                </Styles.CustomButton>
-                <Styles.CustomButton color="inherit">
-                  <Link href={"/register"}>
-                    <a>
-                      <Typography variant="h5" component="h2">
-                        Register
-                      </Typography>
-                    </a>
-                  </Link>
-                </Styles.CustomButton>
-                <Styles.CustomButton color="inherit">
-                  <Link href={"/profile"}>
-                    <a>
-                      <Typography variant="h5" component="h2">
-                        Profile
-                      </Typography>
-                    </a>
-                  </Link>
-                </Styles.CustomButton>
-              </Styles.MenuItems>
-            </Styles.MenuListContainer>
-          </Backdrop>
-        </ThemeProvider>
+        <IconButton
+          edge="end"
+          color="primary"
+          aria-label="menu"
+          onClick={handleToggle}
+        >
+          <MenuIcon color="primary" fontSize="large" />
+        </IconButton>
+        <Backdrop open={open} onClick={handleToggle}>
+          <Styles.MenuListContainer display={open === false ? "none" : "block"}>
+            <Styles.MenuItems>
+              {PAGES.map((page) => (
+                <Styles.ButtonContainer key={page.name}>
+                  <Button>
+                    <Link href={page.href} passHref>
+                      <a>
+                        <Typography variant="h5" component="h2">
+                          {page.name}
+                        </Typography>
+                      </a>
+                    </Link>
+                  </Button>
+                </Styles.ButtonContainer>
+              ))}
+            </Styles.MenuItems>
+          </Styles.MenuListContainer>
+        </Backdrop>
       </Hidden>
     </Styles.HeaderContainer>
   );

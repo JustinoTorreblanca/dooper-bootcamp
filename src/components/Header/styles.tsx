@@ -1,17 +1,19 @@
-import { Button, styled } from "@mui/material";
+import { styled } from "@mui/material";
+import theme from "@src/theme";
 
 export const HeaderContainer = styled("div")`
   color: white;
   display: flex;
   justify-content: space-between;
-  background-color: #fff;
+  background-color: ${theme.palette.common.white};
   align-items: center;
   width: 100%;
   padding: 16px;
   min-height: 76px;
   position: relative;
-  box-shadow: 0px 4px 4px 0px #00000040;
+  box-shadow: ${theme.shadows[1]};
 `;
+
 type MenuListContainerProps = { display?: boolean | string | undefined };
 
 export const MenuListContainer = styled("div")<MenuListContainerProps>`
@@ -23,7 +25,7 @@ export const MenuListContainer = styled("div")<MenuListContainerProps>`
   left: 0;
   display: ${(props) => props.display};
   position: absolute;
-  border-top: 2px solid #9c9c9c;
+  border-top: 2px solid ${theme.palette.grey[600]};
   background-color: white;
   padding: 16px;
 `;
@@ -36,17 +38,20 @@ export const MenuItems = styled("div")`
   min-height: 190px;
 `;
 
-export const CustomButton = styled(Button)`
-  border-bottom: 2px solid gray;
+export const ButtonContainer = styled("div")`
+  border-bottom: 2px solid ${theme.palette.grey[600]};
+  display: flex;
+  justify-content: space-evenly;
   width: 256px;
   border-radius: 0;
+
   :hover {
-    background-color: rgba(43, 52, 69, 0.04);
+    background-color: ${theme.palette.action.hover};
   }
 `;
 
 export const DooperLogo = styled("div")`
-  background-image: url("/_next/image?url=%2Fassets%2Flogo-dooper.png&w=384&q=75");
+  background-image: url("/assets/logo-dooper.png");
   width: 155px;
   height: 65px;
   background-position: center;

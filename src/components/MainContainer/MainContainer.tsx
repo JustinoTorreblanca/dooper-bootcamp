@@ -1,19 +1,13 @@
 import React from "react";
-import { Box } from "@mui/material";
-import { ThemeProvider } from "@mui/material/styles";
-import theme from "@src/theme";
 import * as Styles from "./styles";
-import { MainContainerProps } from "./styles";
+
+type MainContainerProps = { children?: React.ReactNode | HTMLElement };
 
 function MainContainer({ children }: MainContainerProps) {
   return (
-    <ThemeProvider theme={theme}>
-      <Styles.CustomContainer>
-        <Styles.InnerContainer>
-          <Box>{children}</Box>
-        </Styles.InnerContainer>
-      </Styles.CustomContainer>
-    </ThemeProvider>
+    <Styles.CustomContainer>
+      <Styles.InnerContainer>{children}</Styles.InnerContainer>
+    </Styles.CustomContainer>
   );
 }
 
