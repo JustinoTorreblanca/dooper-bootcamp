@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
-    "generate": "yarn plop"
+    "generate": "npm run plop"
   },
   "dependencies": {
     "@emotion/cache": "latest",

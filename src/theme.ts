@@ -7,10 +7,10 @@ const theme = createTheme({
     keys: ["xs", "sm", "md", "lg", "xl"],
     values: {
       xs: 0,
-      sm: 600,
-      md: 960,
-      lg: 1280,
-      xl: 1920
+      sm: 320,
+      md: 768,
+      lg: 1152,
+      xl: 1440
     },
     unit: "px"
   },
@@ -49,6 +49,7 @@ const theme = createTheme({
         }
       }
     },
+
     MuiPagination: {
       defaultProps: {
         variant: "outlined",
@@ -89,7 +90,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           fontWeight: 600,
-          textTransform: "none",
+
           minWidth: 0,
           minHeight: 0
         }
@@ -111,8 +112,35 @@ const theme = createTheme({
           borderRadius: 8
         }
       }
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          color: "#483afe"
+        }
+      },
+      defaultProps: {
+        color: "#483afe"
+      }
+    },
+    MuiBackdrop: {
+      styleOverrides: {
+        root: {
+          top: "97px",
+          color: "#fff",
+          zIndex: 1
+        }
+      }
+    },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          padding: "16px"
+        }
+      }
     }
   },
+  spacing: 8,
   palette: {
     mode: "light",
     primary: {
@@ -125,7 +153,7 @@ const theme = createTheme({
       "700": "#2f2acc",
       "800": "#2924b3",
       "900": "#231f99",
-      main: "#3B34FF",
+      main: "#483afe",
       contrastText: "#FFFFFF",
       light: "#d8d6ff",
       dark: "#2924b3"
@@ -185,9 +213,11 @@ const theme = createTheme({
     text: {
       primary: "#2B3445",
       secondary: "#373F50",
+      light: "#fff",
       disabled: "#DAE1E7"
     },
     divider: "#F3F5F9",
+
     grey: {
       "50": "#fafafa",
       "100": "#F6F9FC",
@@ -456,6 +486,7 @@ const theme = createTheme({
   },
   shadows: [
     "none",
+    "0px 4px 4px 0px #00000040",
     "0px 1px 3px rgba(3, 0, 71, 0.09)",
     "0px 4px 16px rgba(43, 52, 69, 0.1)",
     "0px 8px 45px rgba(3, 0, 71, 0.09)",
