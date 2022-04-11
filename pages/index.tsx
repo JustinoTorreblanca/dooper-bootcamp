@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import MainContainer from "@src/components/MainContainer";
 
 const Home: NextPage = () => {
   return (
@@ -19,15 +18,13 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <MainContainer>
-          <h1>Welcome to:</h1>
-          <Image
-            src="/_next/image?url=%2Fassets%2Flogo-dooper.png&w=384&q=75"
-            alt="dooper"
-            width="200px"
-            height="100px"
-          />
-        </MainContainer>
+        <h1>Welcome to:</h1>
+        <Image
+          src="/_next/image?url=%2Fassets%2Flogo-dooper.png&w=384&q=75"
+          alt="dooper"
+          width="200px"
+          height="100px"
+        />
       </main>
 
       <footer></footer>
