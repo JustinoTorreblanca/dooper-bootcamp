@@ -274,6 +274,9 @@ const theme = createTheme({
       "900": "#5B162F",
       main: "#BE7374"
     },
+    dooperBlue: {
+      dooperBlue: "#362ad4"
+    },
     background: {
       default: "#F6F9FC",
       paper: "#fff"
