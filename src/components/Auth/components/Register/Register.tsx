@@ -1,22 +1,17 @@
 import { useFormik } from "formik";
 import * as React from "react";
 import * as Yup from "yup";
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import * as Styles from "./styles";
 
 const ValidateFormSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(4, "*Pocos caracteres")
-    .max(20, "*Muchos caracteres")
-    .required("*Name is required"),
-  lastName: Yup.string()
-    .min(6, "*Pocos caracteres")
-    .max(20, "*Muchos caracteres")
-    .required("*Last name is required"),
-  email: Yup.string().email(),
+  name: Yup.string().required("Name is required"),
+  lastName: Yup.string().required("Last name is required"),
+  email: Yup.string().email().required("Email is required"),
   phoneNumber: Yup.string()
-    .min(10, "*Asegurate de tener por lo menos 10 caracteres")
-    .max(15, "Demasiados caracteres")
+    .min(10, "Phonenumber must have 10 characters")
+    .max(11, "Too many characters, make sure you type 10 characters")
+    .required("Email is required")
 });
 
 export default function Register() {
@@ -25,17 +20,16 @@ export default function Register() {
       name: "",
       lastName: "",
       email: "",
-      phoneNumber: "",
-      createdOn: new Date()
+      phoneNumber: ""
     },
     validationSchema: ValidateFormSchema,
     onSubmit: (value) => {
-      console.log({ value });
+      alert(JSON.stringify(value, null, 2));
     }
   });
-  console.log(formik);
+
   return (
-    <Styles.Element>
+    <Styles.RegisterWrapper>
       <Typography
         component="h2"
         variant="h3"
@@ -46,18 +40,18 @@ export default function Register() {
       >
         Register
       </Typography>
-      <form onSubmit={formik.handleSubmit}>
+      <Styles.CustomForm onSubmit={formik.handleSubmit}>
         <Styles.CustomTextField
           variant="standard"
           required
           fullWidth
           name="name"
           label="Name"
+          type="name"
           onChange={formik.handleChange}
-          /* helperText={formik.errors.user}
-          error */
+          helperText={formik.errors.name}
         />
-        {formik.errors && formik.errors.name && <p>{formik.errors.name}</p>}
+
         <Styles.CustomTextField
           variant="standard"
           required
@@ -65,23 +59,20 @@ export default function Register() {
           name="lastName"
           label="Last name"
           onChange={formik.handleChange}
-          /* helperText={formik.errors.user}
-          error */
+          helperText={formik.errors.lastName}
         />
-        {formik.errors && formik.errors.lastName && (
-          <p>{formik.errors.lastName}</p>
-        )}
+
         <Styles.CustomTextField
           variant="standard"
           required
           fullWidth
           name="email"
-          label={"Email"}
+          label="Email"
+          type="email"
           onChange={formik.handleChange}
-          /* helperText={formik.errors.email}
-          error */
+          helperText={formik.errors.email}
         />
-        {formik.errors && formik.errors.email && <p>{formik.errors.email}</p>}
+
         <Styles.CustomTextField
           variant="standard"
           required
@@ -89,20 +80,17 @@ export default function Register() {
           name="phoneNumber"
           label={"Phone number"}
           onChange={formik.handleChange}
-          /* helperText={formik.errors.phoneNumber}
-          error */
+          helperText={formik.errors.phoneNumber}
         />
-        {formik.errors && formik.errors.phoneNumber && (
-          <p>{formik.errors.phoneNumber}</p>
-        )}
-        <Button
+
+        <Styles.CustomButton
           variant="contained"
           type="submit"
           disabled={formik.isSubmitting}
         >
           {formik.isSubmitting ? "Enviando..." : "Enviar"}
-        </Button>
-      </form>
-    </Styles.Element>
+        </Styles.CustomButton>
+      </Styles.CustomForm>
+    </Styles.RegisterWrapper>
   );
 }

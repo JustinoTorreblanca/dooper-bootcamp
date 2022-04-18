@@ -1,18 +1,28 @@
 import { useFormik } from "formik";
 import * as React from "react";
 import * as Yup from "yup";
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import * as Styles from "./styles";
 
 const ValidateFormSchema = Yup.object().shape({
   username: Yup.string()
-    .min(6, "Pocos caracteres")
-    .max(10, "Muchos caracteres")
+    .min(5, "Username must have min 5 characters")
+    .max(10, "Username allows max 10 characters")
     .required("Username is required"),
   password: Yup.string()
-    .min(6, "Pocos caracteres")
-    .max(10, "Muchos caracteres")
+    .min(6, "Password must have min 6 characters")
+    .max(10, "Password allows max 10 characters")
     .required("Password is required")
+    .matches(new RegExp(/(?=.*[a-z])/), "Must contain lowercase a-z characters")
+    .matches(
+      new RegExp(/(?=.*[A-Z])/),
+      "Must contain one or more uppercase characters"
+    )
+    .matches(new RegExp(/(?=.*[0-9])/), "Must contain at least one number")
+    .matches(
+      new RegExp(/(?=.*[!@#$%^&*])/),
+      "Must contain at least one !@#$%^&* special character"
+    )
 });
 
 export default function Login() {
@@ -23,12 +33,12 @@ export default function Login() {
     },
     validationSchema: ValidateFormSchema,
     onSubmit: (value) => {
-      console.log({ value });
+      alert(JSON.stringify(value, null, 2));
     }
   });
-  console.log(formik);
+
   return (
-    <Styles.Element>
+    <Styles.LoginWrapper>
       <Typography
         component="h2"
         variant="h3"
@@ -39,7 +49,7 @@ export default function Login() {
       >
         Login
       </Typography>
-      <form onSubmit={formik.handleSubmit}>
+      <Styles.CustomForm onSubmit={formik.handleSubmit}>
         <Styles.CustomTextField
           variant="standard"
           required
@@ -47,33 +57,28 @@ export default function Login() {
           name="username"
           label="Username"
           onChange={formik.handleChange}
-          /* helperText={formik.errors.user}
-          error */
+          helperText={formik.errors.username}
         />
-        {formik.errors && formik.errors.username && (
-          <p>{formik.errors.username}</p>
-        )}
+
         <Styles.CustomTextField
           variant="standard"
           required
           fullWidth
           name="password"
+          type={"password"}
           label={"Password"}
           onChange={formik.handleChange}
-          /* helperText={formik.errors.password}
-          error */
+          helperText={formik.errors.password}
         />
-        {formik.errors && formik.errors.password && (
-          <p>{formik.errors.password}</p>
-        )}
-        <Button
+
+        <Styles.CustomButton
           variant="contained"
           type="submit"
           disabled={formik.isSubmitting}
         >
           {formik.isSubmitting ? "Enviando..." : "Enviar"}
-        </Button>
-      </form>
-    </Styles.Element>
+        </Styles.CustomButton>
+      </Styles.CustomForm>
+    </Styles.LoginWrapper>
   );
 }

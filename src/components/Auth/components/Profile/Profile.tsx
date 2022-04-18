@@ -24,7 +24,7 @@ export default function Profile() {
     phone_number: "3216549877",
     photo_url: ""
   };
-  console.log(userProfile);
+
   return (
     <Styles.Element>
       <Typography
@@ -32,7 +32,7 @@ export default function Profile() {
         variant="h3"
         align="center"
         fontWeight="bold"
-        color="thertiary"
+        color="tertiary"
         marginBottom={"15px"}
       >
         Profile
