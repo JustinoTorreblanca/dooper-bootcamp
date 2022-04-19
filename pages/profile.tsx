@@ -1,5 +1,7 @@
-const Profile = () => {
-  return <h1>Profile</h1>;
+import Profile from "@src/components/Auth/components/Profile/Profile";
+
+const ProfilePage = () => {
+  return <Profile />;
 };
 
 export default Profile;

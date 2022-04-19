@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import DesktopMenu from "./components/DesktopMenu";
-import HamburguerMenu from "./components/HamburguerMenu";
+import HamburguerMenu from "./components/HamburguerMenu/HamburguerMenu";
 import HeaderLogo from "./components/HeaderLogo";
 import * as Styles from "./styles";
 
