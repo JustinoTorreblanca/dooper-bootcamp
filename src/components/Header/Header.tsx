@@ -5,17 +5,17 @@ import HamburguerMenu from "./components/HamburguerMenu/HamburguerMenu";
 import HeaderLogo from "./components/HeaderLogo";
 import * as Styles from "./styles";
 
-type PageProps = { name: string; href: string };
+type PageProps = { name: string; href: string; onlyAuthenticated: boolean };
 
 export type HamburguerMenuProps = {
   handleToggle: () => void;
   open: () => void;
 };
-
+/*  */
 export const PAGES: PageProps[] = [
-  { name: "Login", href: "/login" },
-  { name: "Register", href: "/register" },
-  { name: "Profile", href: "/profile" }
+  { name: "Login", href: "/login", onlyAuthenticated: false },
+  { name: "Register", href: "/register", onlyAuthenticated: false },
+  { name: "Profile", href: "/profile", onlyAuthenticated: true }
 ];
 
 export default function Header() {

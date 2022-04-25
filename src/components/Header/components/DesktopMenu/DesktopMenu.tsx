@@ -8,6 +8,7 @@ function DesktopMenu() {
     <Box>
       <Box display={{ sm: "none", md: "block" }}>
         {PAGES.map((page) => (
+          /* if onlyAuth true and user render  */
           <Button key={page.name}>
             <Link href={page.href} passHref>
               <a>

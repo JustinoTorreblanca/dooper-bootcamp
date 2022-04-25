@@ -22,5 +22,6 @@ export const CustomForm = styled("form")`
 `;
 
 export const CustomButton = styled(Button)`
-  width: 81px;
+  width: 110px;
+  height: 37px;
 `;

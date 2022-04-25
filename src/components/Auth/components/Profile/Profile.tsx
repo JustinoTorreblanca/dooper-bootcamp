@@ -1,5 +1,10 @@
+import Link from "next/link";
 import * as React from "react";
-import { Box, Typography } from "@mui/material";
+import { useState } from "react";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import { useAuth } from "@src/contexts/AuthContext";
+import PrivateComponent from "@src/utils/PrivateComponent";
+import { supabase } from "@src/utils/supabaseClient";
 import * as Styles from "./styles";
 
 type UserProfileProps = {
@@ -14,41 +19,131 @@ type UserProfileProps = {
 };
 
 export default function Profile() {
-  const userProfile: UserProfileProps = {
-    name: "Jane",
-    lastname: "Doe",
-    city: "CDMX",
-    state: "CDMX",
-    country: "Mex",
-    email: "jane.doe@doe.com",
-    phone_number: "3216549877",
-    photo_url: ""
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone_number, setPhone_number] = useState("");
+  const [photo_url, setPhoto_url] = useState("");
+  const { logout, user } = useAuth();
+
+  type UserProfileProps = {
+    name: string;
+    lastname: string;
+    city: string;
+    state: string;
+    country: string;
+    email: string;
+    phone_number: string;
+    photo_url: string;
+  };
+
+  const updateProfile = () => {
+    return supabase.auth.update({
+      data: {
+        firstName: firstName,
+        lastName: lastName,
+        city: city,
+        country: country,
+        email: email,
+        phone_number: phone_number,
+        photo_url: photo_url
+      }
+    });
   };
 
   return (
-    <Styles.Element>
-      <Typography
-        component="h2"
-        variant="h3"
-        align="center"
-        fontWeight="bold"
-        color="tertiary"
-        marginBottom={"15px"}
-      >
-        Profile
-      </Typography>
-      <Styles.ProfilePhoto />
-      <Box>
-        <ul>
-          <li>Name: {userProfile.name}</li>
-          <li>Last Name: {userProfile.lastname}</li>
-          <li>City: {userProfile.city}</li>
-          <li>Country: {userProfile.country}</li>
-          <li>Email: {userProfile.email}</li>
-          <li>Phone number: {userProfile.phone_number}</li>
-          <li>Photo url {userProfile.photo_url}</li>
-        </ul>
-      </Box>
-    </Styles.Element>
+    <PrivateComponent requiredPermission={user}>
+      <Styles.Element>
+        <Typography
+          component="h2"
+          variant="h3"
+          align="center"
+          fontWeight="bold"
+          color="tertiary"
+          marginBottom={"15px"}
+        >
+          Profile
+        </Typography>
+
+        <Styles.ProfilePhoto />
+        <Link href="/" passHref>
+          <a>
+            <Button onClick={logout}>Log out</Button>
+          </a>
+        </Link>
+
+        <Box>
+          <ul>
+            <li>
+              Name:
+              <TextField
+                defaultValue={
+                  user?.user_metadata.firstName === ""
+                    ? ""
+                    : user?.user_metadata.firstName
+                }
+                type="firstname"
+                onChange={(event) => setFirstName(event.target.value)}
+              />
+            </li>
+            <li>
+              Last Name:
+              <TextField
+                defaultValue={user?.user_metadata.lastName}
+                type="lastname"
+                onChange={(event) => setLastName(event.target.value)}
+              />
+            </li>
+            <li>
+              City:
+              <TextField
+                type="text"
+                defaultValue={
+                  user?.user_metadata.city === ""
+                    ? ""
+                    : user?.user_metadata.firstName
+                }
+                onChange={(event) => setCity(event.target.value)}
+              />
+            </li>
+            <li>
+              Country:
+              <TextField
+                type="text"
+                defaultValue="Country"
+                onChange={(event) => setCountry(event.target.value)}
+              />
+            </li>
+            <li>
+              Email:
+              <TextField
+                type="text"
+                defaultValue={user?.email}
+                onChange={(event) => setEmail(event.target.value)}
+              />
+            </li>
+            <li>
+              Phone number:
+              <TextField
+                defaultValue={user?.user_metadata.phone}
+                type="text"
+                onChange={(event) => setPhone_number(event.target.value)}
+              />
+            </li>
+            <li>
+              Photo url
+              <TextField
+                type={"text"}
+                defaultValue="photo_url"
+                onChange={(event) => setPhoto_url(event.target.value)}
+              />
+            </li>
+          </ul>
+          <Button onClick={updateProfile}>Update my profile</Button>
+        </Box>
+      </Styles.Element>
+    </PrivateComponent>
   );
 }

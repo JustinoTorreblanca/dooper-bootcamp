@@ -1,13 +1,16 @@
 import { useFormik } from "formik";
+import { useRouter } from "next/router";
 import * as React from "react";
+import { useState } from "react";
 import * as Yup from "yup";
 import { Typography } from "@mui/material";
+import { supabase } from "@src/utils/supabaseClient";
 import * as Styles from "./styles";
 
 const ValidateFormSchema = Yup.object().shape({
-  username: Yup.string()
+  email: Yup.string()
     .min(5, "Username must have min 5 characters")
-    .max(10, "Username allows max 10 characters")
+
     .required("Username is required"),
   password: Yup.string()
     .min(6, "Password must have min 6 characters")
@@ -26,15 +29,27 @@ const ValidateFormSchema = Yup.object().shape({
 });
 
 export default function Login() {
+  const [error, setError] = useState("");
+
+  const router = useRouter();
+
+  const handleUserLogin = async (value: any) => {
+    setError("");
+    const { user, session, error } = await supabase.auth.signIn({
+      email: formik.values.email,
+      password: formik.values.password
+    });
+    error ? setError(error.message) : null;
+  };
+  /*tinotr+16 Abcd123# */
+
   const formik = useFormik({
     initialValues: {
-      username: "",
+      email: "",
       password: ""
     },
     validationSchema: ValidateFormSchema,
-    onSubmit: (value) => {
-      alert(JSON.stringify(value, null, 2));
-    }
+    onSubmit: handleUserLogin
   });
 
   return (
@@ -44,7 +59,7 @@ export default function Login() {
         variant="h3"
         align="center"
         fontWeight="bold"
-        color="thertiary"
+        color="tertiary"
         marginBottom={"15px"}
       >
         Login
@@ -54,10 +69,10 @@ export default function Login() {
           variant="standard"
           required
           fullWidth
-          name="username"
-          label="Username"
+          name="email"
+          label="Email"
           onChange={formik.handleChange}
-          helperText={formik.errors.username}
+          helperText={formik.errors.email}
         />
 
         <Styles.CustomTextField
@@ -70,14 +85,22 @@ export default function Login() {
           onChange={formik.handleChange}
           helperText={formik.errors.password}
         />
-
+        {/*  <Link href="/profile" passHref>
+          <a> */}
         <Styles.CustomButton
           variant="contained"
           type="submit"
           disabled={formik.isSubmitting}
+          /* onClick={(e) => {
+            {
+              e.preventDefault(), router.replace("/");
+            }
+          }} */
         >
           {formik.isSubmitting ? "Enviando..." : "Enviar"}
         </Styles.CustomButton>
+        {/*  </a>
+        </Link> */}
       </Styles.CustomForm>
     </Styles.LoginWrapper>
   );
