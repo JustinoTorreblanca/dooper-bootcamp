@@ -11,7 +11,7 @@ export type HamburguerMenuProps = {
   handleToggle: () => void;
   open: () => void;
 };
-/*  */
+
 export const PAGES: PageProps[] = [
   { name: "Login", href: "/login", onlyAuthenticated: false },
   { name: "Register", href: "/register", onlyAuthenticated: false },

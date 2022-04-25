@@ -79,11 +79,7 @@ export default function Profile() {
             <li>
               Name:
               <TextField
-                defaultValue={
-                  user?.user_metadata.firstName === ""
-                    ? ""
-                    : user?.user_metadata.firstName
-                }
+                defaultValue={user?.user_metadata.firstName}
                 type="firstname"
                 onChange={(event) => setFirstName(event.target.value)}
               />
@@ -100,11 +96,7 @@ export default function Profile() {
               City:
               <TextField
                 type="text"
-                defaultValue={
-                  user?.user_metadata.city === ""
-                    ? ""
-                    : user?.user_metadata.firstName
-                }
+                defaultValue={user?.user_metadata.city}
                 onChange={(event) => setCity(event.target.value)}
               />
             </li>
@@ -112,7 +104,7 @@ export default function Profile() {
               Country:
               <TextField
                 type="text"
-                defaultValue="Country"
+                defaultValue={user?.user_metadata.country}
                 onChange={(event) => setCountry(event.target.value)}
               />
             </li>
