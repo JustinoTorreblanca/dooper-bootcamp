@@ -13,7 +13,6 @@ const PrivateComponent: React.FC<PrivateRouteProps> = (props) => {
 
   useEffect(() => {
     setCheckSession(session);
-    console.log(typeof checkSession);
     supabase.auth.onAuthStateChange((_event, checkSession) => {
       setCheckSession(checkSession);
     });

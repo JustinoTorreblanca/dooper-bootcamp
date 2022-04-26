@@ -39,8 +39,8 @@ export default function Profile() {
     photo_url: string;
   };
 
-  const updateProfile = () => {
-    return supabase.auth.update({
+  const updateProfile = async () => {
+    return await supabase.auth.update({
       data: {
         firstName: firstName,
         lastName: lastName,
