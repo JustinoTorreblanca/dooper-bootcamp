@@ -8,17 +8,16 @@ export interface PrivateRouteProps {
 }
 
 const PrivateComponent: React.FC<PrivateRouteProps> = (props) => {
-  const [isAuthorized, setisAuthorized] = useState<boolean>();
   const { session, user } = useAuth();
-  const [checkSession, setCheckSession] = useState();
+  const [checkSession, setCheckSession] = useState<any | null>();
 
   useEffect(() => {
     setCheckSession(session);
-
+    console.log(typeof checkSession);
     supabase.auth.onAuthStateChange((_event, checkSession) => {
       setCheckSession(checkSession);
     });
-  }, []);
+  }, [session, checkSession]);
 
   return (
     <>
