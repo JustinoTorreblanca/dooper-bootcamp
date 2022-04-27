@@ -1,4 +1,5 @@
 import { useFormik } from "formik";
+import { useRouter } from "next/router";
 import * as React from "react";
 import { useState } from "react";
 import * as Yup from "yup";
@@ -35,7 +36,7 @@ export default function Register() {
   const [error, setError] = useState("");
   const [userRegistered, setUserRegistered] = useState({});
   const { authUser, session } = useAuth();
-
+  const router = useRouter();
   //console.log(authUser, session);
 
   const handleRegister = async (value: any) => {
@@ -54,8 +55,15 @@ export default function Register() {
         //redirectTo: (window.location.href = redirectToProfile)
       }
     );
-    error ? setError(error.message) : null;
-    user ? setUserRegistered(userRegistered) : null;
+
+    if (error) {
+      setError(error.message);
+    }
+
+    if (user) {
+      // redirigir a la ruta profile
+      router.push("/profile");
+    }
   };
 
   const formik = useFormik({

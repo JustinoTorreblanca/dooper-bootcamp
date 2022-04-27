@@ -34,12 +34,19 @@ export default function Login() {
   const router = useRouter();
 
   const handleUserLogin = async (value: any) => {
-    setError("");
     const { user, session, error } = await supabase.auth.signIn({
       email: formik.values.email,
       password: formik.values.password
     });
-    error ? setError(error.message) : null;
+    if (error) {
+      setError(error.message);
+      //Mostrar spinner o loading
+      return;
+    }
+
+    if (user) {
+      router.push("/profile");
+    }
   };
   /*tinotr+16 Abcd123# */
 

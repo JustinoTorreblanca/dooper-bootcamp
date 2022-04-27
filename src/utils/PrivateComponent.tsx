@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { useAuth } from "@src/contexts/AuthContext";
-import { supabase } from "@src/utils/supabaseClient";
 
 export interface PrivateRouteProps {
   requiredPermission: string;
@@ -9,14 +7,6 @@ export interface PrivateRouteProps {
 
 const PrivateComponent: React.FC<PrivateRouteProps> = (props) => {
   const { session, user } = useAuth();
-  const [checkSession, setCheckSession] = useState<any | null>();
-
-  useEffect(() => {
-    setCheckSession(session);
-    supabase.auth.onAuthStateChange((_event, checkSession) => {
-      setCheckSession(checkSession);
-    });
-  }, [session, checkSession]);
 
   return (
     <>

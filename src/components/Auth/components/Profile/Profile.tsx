@@ -1,6 +1,8 @@
+import { useFormik } from "formik";
 import Link from "next/link";
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import * as Yup from "yup";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useAuth } from "@src/contexts/AuthContext";
 import PrivateComponent from "@src/utils/PrivateComponent";
@@ -8,15 +10,18 @@ import { supabase } from "@src/utils/supabaseClient";
 import * as Styles from "./styles";
 
 type UserProfileProps = {
-  name: string;
-  lastname: string;
+  first_name: string;
+  last_name: string;
   city: string;
-  state: string;
   country: string;
   email: string;
-  phone_number: string;
+  phone: string;
   photo_url: string;
 };
+
+const ValidateFormSchema = Yup.object().shape({
+  phone: Yup.string().min(10, "Phone must be 10 digits length")
+});
 
 export default function Profile() {
   const [firstName, setFirstName] = useState("");
@@ -27,18 +32,64 @@ export default function Profile() {
   const [phone_number, setPhone_number] = useState("");
   const [photo_url, setPhoto_url] = useState("");
   const { logout, user } = useAuth();
+  const [profile, setProfile] = useState<UserProfileProps>();
 
-  type UserProfileProps = {
-    name: string;
-    lastname: string;
-    city: string;
-    state: string;
-    country: string;
-    email: string;
-    phone_number: string;
-    photo_url: string;
+  const getProfile = async () => {
+    const user = await supabase.auth.user();
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user?.id)
+      .maybeSingle();
+
+    if (error) {
+      //mostrar algo al usuario
+      return;
+    }
+
+    return data;
   };
 
+  useEffect(() => {
+    const fetch = async () => {
+      const profile = await getProfile();
+      setProfile(profile);
+    };
+
+    fetch();
+  }, []);
+
+  const handleUpdate = async (values: any) => {
+    console.log({ values });
+
+    const { data, error } = await supabase
+      .from("profiles")
+      .update(values)
+      .eq("id", user?.id)
+      .maybeSingle();
+
+    if (error) {
+      //mostrar algo al usuario
+      return;
+    }
+
+    // mostrar feedback al usuario
+    setProfile(data);
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      first_name: profile?.first_name,
+      last_name: profile?.last_name,
+      city: profile?.city,
+      country: profile?.country,
+      phone: profile?.phone,
+      photo_url: profile?.photo_url
+    },
+    //validationSchema: ValidateFormSchema,
+    onSubmit: handleUpdate,
+    enableReinitialize: true
+  });
   const updateProfile = async () => {
     return await supabase.auth.update({
       data: {
@@ -79,61 +130,64 @@ export default function Profile() {
             <li>
               Name:
               <TextField
-                defaultValue={user?.user_metadata.firstName}
-                type="firstname"
-                onChange={(event) => setFirstName(event.target.value)}
+                // defaultValue={user?.user_metadata.firstName}
+                value={formik.values.first_name || ""}
+                type="text"
+                name="first_name"
+                onChange={formik.handleChange}
               />
             </li>
             <li>
               Last Name:
               <TextField
-                defaultValue={user?.user_metadata.lastName}
-                type="lastname"
-                onChange={(event) => setLastName(event.target.value)}
+                // defaultValue={user?.user_metadata.lastName}
+                value={formik.values.last_name || ""}
+                type="text"
+                name="last_name"
+                onChange={formik.handleChange}
               />
             </li>
             <li>
               City:
               <TextField
                 type="text"
-                defaultValue={user?.user_metadata.city}
-                onChange={(event) => setCity(event.target.value)}
+                value={formik.values.city || ""}
+                // defaultValue={user?.user_metadata.city}
+                name="city"
+                onChange={formik.handleChange}
               />
             </li>
             <li>
               Country:
               <TextField
                 type="text"
-                defaultValue={user?.user_metadata.country}
-                onChange={(event) => setCountry(event.target.value)}
-              />
-            </li>
-            <li>
-              Email:
-              <TextField
-                type="text"
-                defaultValue={user?.email}
-                onChange={(event) => setEmail(event.target.value)}
+                value={formik.values.country || ""}
+                //defaultValue={user?.user_metadata.country}
+                name="country"
+                onChange={formik.handleChange}
               />
             </li>
             <li>
               Phone number:
               <TextField
-                defaultValue={user?.user_metadata.phone}
+                //defaultValue={user?.user_metadata.phone}
+                value={formik.values.phone || ""}
                 type="text"
-                onChange={(event) => setPhone_number(event.target.value)}
+                name="phone"
+                onChange={formik.handleChange}
               />
             </li>
             <li>
               Photo url
               <TextField
-                type={"text"}
-                defaultValue="photo_url"
-                onChange={(event) => setPhoto_url(event.target.value)}
+                type="text"
+                value={formik.values.photo_url || ""}
+                name="photo_url"
+                onChange={formik.handleChange}
               />
             </li>
           </ul>
-          <Button onClick={updateProfile}>Update my profile</Button>
+          <Button onClick={formik.submitForm}>Update my profile</Button>
         </Box>
       </Styles.Element>
     </PrivateComponent>

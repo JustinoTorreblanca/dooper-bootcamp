@@ -13,7 +13,6 @@ export function useAuth() {
 }
 
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState();
   const [session, setSession] = useState(null);
 
   useEffect(() => {
