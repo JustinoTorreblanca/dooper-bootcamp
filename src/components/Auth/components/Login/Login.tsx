@@ -48,7 +48,6 @@ export default function Login() {
       router.push("/profile");
     }
   };
-  /*tinotr+16 Abcd123# */
 
   const formik = useFormik({
     initialValues: {

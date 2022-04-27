@@ -79,12 +79,12 @@ export default function Profile() {
 
   const formik = useFormik({
     initialValues: {
-      first_name: profile?.first_name,
-      last_name: profile?.last_name,
-      city: profile?.city,
-      country: profile?.country,
-      phone: profile?.phone,
-      photo_url: profile?.photo_url
+      first_name: profile?.first_name || "",
+      last_name: profile?.last_name || "",
+      city: profile?.city || "",
+      country: profile?.country || "",
+      phone: profile?.phone || "",
+      photo_url: profile?.photo_url || ""
     },
     //validationSchema: ValidateFormSchema,
     onSubmit: handleUpdate,
@@ -113,7 +113,7 @@ export default function Profile() {
           align="center"
           fontWeight="bold"
           color="tertiary"
-          marginBottom={"15px"}
+          marginBottom="15px"
         >
           Profile
         </Typography>
@@ -130,8 +130,7 @@ export default function Profile() {
             <li>
               Name:
               <TextField
-                // defaultValue={user?.user_metadata.firstName}
-                value={formik.values.first_name || ""}
+                value={formik.values.first_name}
                 type="text"
                 name="first_name"
                 onChange={formik.handleChange}
@@ -140,8 +139,7 @@ export default function Profile() {
             <li>
               Last Name:
               <TextField
-                // defaultValue={user?.user_metadata.lastName}
-                value={formik.values.last_name || ""}
+                value={formik.values.last_name}
                 type="text"
                 name="last_name"
                 onChange={formik.handleChange}
@@ -151,8 +149,7 @@ export default function Profile() {
               City:
               <TextField
                 type="text"
-                value={formik.values.city || ""}
-                // defaultValue={user?.user_metadata.city}
+                value={formik.values.city}
                 name="city"
                 onChange={formik.handleChange}
               />
@@ -161,8 +158,7 @@ export default function Profile() {
               Country:
               <TextField
                 type="text"
-                value={formik.values.country || ""}
-                //defaultValue={user?.user_metadata.country}
+                value={formik.values.country}
                 name="country"
                 onChange={formik.handleChange}
               />
@@ -170,8 +166,7 @@ export default function Profile() {
             <li>
               Phone number:
               <TextField
-                //defaultValue={user?.user_metadata.phone}
-                value={formik.values.phone || ""}
+                value={formik.values.phone}
                 type="text"
                 name="phone"
                 onChange={formik.handleChange}
@@ -181,7 +176,7 @@ export default function Profile() {
               Photo url
               <TextField
                 type="text"
-                value={formik.values.photo_url || ""}
+                value={formik.values.photo_url}
                 name="photo_url"
                 onChange={formik.handleChange}
               />
