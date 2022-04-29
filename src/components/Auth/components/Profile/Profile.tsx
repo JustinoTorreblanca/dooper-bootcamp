@@ -3,7 +3,14 @@ import Link from "next/link";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Stack,
+  Typography
+} from "@mui/material";
 import { useAuth } from "@src/contexts/AuthContext";
 import PrivateComponent from "@src/utils/PrivateComponent";
 import { supabase } from "@src/utils/supabaseClient";
@@ -20,19 +27,35 @@ type UserProfileProps = {
 };
 
 const ValidateFormSchema = Yup.object().shape({
-  phone: Yup.string().min(10, "Phone must be 10 digits length")
+  first_name: Yup.string().matches(
+    new RegExp(/^[a-z ,.'-]+$/i),
+    "First Name should only contain letters"
+  ),
+  last_name: Yup.string().matches(
+    new RegExp(/^[a-z ,.'-]+$/i),
+    "First Name should only contain letters"
+  ),
+  city: Yup.string().matches(
+    new RegExp(/^[a-z ,.'-]+$/i),
+    "City should only contain letters"
+  ),
+  country: Yup.string().matches(
+    new RegExp(/^[a-z ,.'-]+$/i),
+    "Country should only contain letters"
+  ),
+  phone: Yup.string().min(10, "Phone must be 10 digits length"),
+  photo_url: Yup.string().matches(
+    new RegExp(/(\.(jpg|jpeg|png|gif|pdf))/i),
+    "Pleas enter a valid Photo URL"
+  )
 });
 
 export default function Profile() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [city, setCity] = useState("");
-  const [country, setCountry] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone_number, setPhone_number] = useState("");
-  const [photo_url, setPhoto_url] = useState("");
   const { logout, user } = useAuth();
   const [profile, setProfile] = useState<UserProfileProps>();
+  const [getProfileError, setGetProfileError] = useState();
+  const [handleUpdateError, setHandleUpdateError] = useState<string>();
+  const [successAlert, setSuccessAlert] = useState(false);
 
   const getProfile = async () => {
     const user = await supabase.auth.user();
@@ -43,7 +66,8 @@ export default function Profile() {
       .maybeSingle();
 
     if (error) {
-      //mostrar algo al usuario
+      setGetProfileError(getProfileError);
+
       return;
     }
 
@@ -60,8 +84,6 @@ export default function Profile() {
   }, []);
 
   const handleUpdate = async (values: any) => {
-    console.log({ values });
-
     const { data, error } = await supabase
       .from("profiles")
       .update(values)
@@ -69,13 +91,16 @@ export default function Profile() {
       .maybeSingle();
 
     if (error) {
-      //mostrar algo al usuario
+      setHandleUpdateError(error.message);
       return;
     }
-
-    // mostrar feedback al usuario
+    setSuccessAlert(true);
     setProfile(data);
   };
+
+  useEffect(() => {
+    setTimeout(() => setSuccessAlert(false), 5000);
+  }, [successAlert]);
 
   const formik = useFormik({
     initialValues: {
@@ -86,23 +111,10 @@ export default function Profile() {
       phone: profile?.phone || "",
       photo_url: profile?.photo_url || ""
     },
-    //validationSchema: ValidateFormSchema,
+    validationSchema: ValidateFormSchema,
     onSubmit: handleUpdate,
     enableReinitialize: true
   });
-  const updateProfile = async () => {
-    return await supabase.auth.update({
-      data: {
-        firstName: firstName,
-        lastName: lastName,
-        city: city,
-        country: country,
-        email: email,
-        phone_number: phone_number,
-        photo_url: photo_url
-      }
-    });
-  };
 
   return (
     <PrivateComponent requiredPermission={user}>
@@ -124,65 +136,80 @@ export default function Profile() {
             <Button onClick={logout}>Log out</Button>
           </a>
         </Link>
+        <Box display="flex" flexDirection="column">
+          <Styles.CustomForm onSubmit={formik.handleSubmit}>
+            <label>First Name:</label>
+            <Styles.CustomTextField
+              value={formik.values.first_name}
+              type="text"
+              name="first_name"
+              onChange={formik.handleChange}
+              helperText={formik.errors.first_name}
+            />
+            <label>Last Name:</label>
+            <Styles.CustomTextField
+              value={formik.values.last_name}
+              type="text"
+              name="last_name"
+              onChange={formik.handleChange}
+              helperText={formik.errors.last_name}
+            />
+            City:
+            <Styles.CustomTextField
+              type="text"
+              value={formik.values.city}
+              name="city"
+              onChange={formik.handleChange}
+              helperText={formik.errors.city}
+            />
+            Country:
+            <Styles.CustomTextField
+              type="text"
+              value={formik.values.country}
+              name="country"
+              onChange={formik.handleChange}
+              helperText={formik.errors.country}
+            />
+            Phone number:
+            <Styles.CustomTextField
+              value={formik.values.phone}
+              type="text"
+              name="phone"
+              onChange={formik.handleChange}
+              helperText={formik.errors.phone}
+            />
+            Photo URL
+            <Styles.CustomTextField
+              type="text"
+              value={formik.values.photo_url}
+              name="photo_url"
+              onChange={formik.handleChange}
+              helperText={formik.errors.photo_url}
+            />
+          </Styles.CustomForm>
 
-        <Box>
-          <ul>
-            <li>
-              Name:
-              <TextField
-                value={formik.values.first_name}
-                type="text"
-                name="first_name"
-                onChange={formik.handleChange}
-              />
-            </li>
-            <li>
-              Last Name:
-              <TextField
-                value={formik.values.last_name}
-                type="text"
-                name="last_name"
-                onChange={formik.handleChange}
-              />
-            </li>
-            <li>
-              City:
-              <TextField
-                type="text"
-                value={formik.values.city}
-                name="city"
-                onChange={formik.handleChange}
-              />
-            </li>
-            <li>
-              Country:
-              <TextField
-                type="text"
-                value={formik.values.country}
-                name="country"
-                onChange={formik.handleChange}
-              />
-            </li>
-            <li>
-              Phone number:
-              <TextField
-                value={formik.values.phone}
-                type="text"
-                name="phone"
-                onChange={formik.handleChange}
-              />
-            </li>
-            <li>
-              Photo url
-              <TextField
-                type="text"
-                value={formik.values.photo_url}
-                name="photo_url"
-                onChange={formik.handleChange}
-              />
-            </li>
-          </ul>
+          {getProfileError ? (
+            <Stack>
+              <Alert severity="error">
+                <AlertTitle>{getProfileError}</AlertTitle>
+              </Alert>
+            </Stack>
+          ) : null}
+          {handleUpdateError ? (
+            <Stack>
+              <Alert severity="error">
+                <AlertTitle>{handleUpdateError}</AlertTitle>
+              </Alert>
+            </Stack>
+          ) : null}
           <Button onClick={formik.submitForm}>Update my profile</Button>
+          {successAlert ? (
+            <Stack>
+              <Alert severity="success">
+                <AlertTitle>Your profile has been updated.</AlertTitle>
+              </Alert>
+            </Stack>
+          ) : null}
         </Box>
       </Styles.Element>
     </PrivateComponent>

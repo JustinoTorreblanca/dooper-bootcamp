@@ -1,11 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { supabase } from "@src/utils/supabaseClient";
 
-/* export type AuthContextProps = {
-  signup: () => void;
-  login: () => void;
-  logout: () => void;
-}; */
 export const AuthContext = React.createContext();
 
 export function useAuth() {
@@ -23,8 +18,6 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const user = supabase.auth.user();
-  console.log("user: ", user);
-  console.log("session", session);
 
   function logout() {
     supabase.auth.signOut();

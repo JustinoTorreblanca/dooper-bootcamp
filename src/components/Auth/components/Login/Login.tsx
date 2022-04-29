@@ -1,16 +1,16 @@
 import { useFormik } from "formik";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useState } from "react";
 import * as Yup from "yup";
-import { Typography } from "@mui/material";
+import { Alert, AlertTitle, Stack, Typography } from "@mui/material";
 import { supabase } from "@src/utils/supabaseClient";
 import * as Styles from "./styles";
 
 const ValidateFormSchema = Yup.object().shape({
   email: Yup.string()
     .min(5, "Username must have min 5 characters")
-
     .required("Username is required"),
   password: Yup.string()
     .min(6, "Password must have min 6 characters")
@@ -30,6 +30,7 @@ const ValidateFormSchema = Yup.object().shape({
 
 export default function Login() {
   const [error, setError] = useState("");
+  const [open, setOpen] = useState(false);
 
   const router = useRouter();
 
@@ -40,7 +41,7 @@ export default function Login() {
     });
     if (error) {
       setError(error.message);
-      //Mostrar spinner o loading
+      setOpen(!open);
       return;
     }
 
@@ -59,55 +60,65 @@ export default function Login() {
   });
 
   return (
-    <Styles.LoginWrapper>
-      <Typography
-        component="h2"
-        variant="h3"
-        align="center"
-        fontWeight="bold"
-        color="tertiary"
-        marginBottom={"15px"}
-      >
-        Login
-      </Typography>
-      <Styles.CustomForm onSubmit={formik.handleSubmit}>
-        <Styles.CustomTextField
-          variant="standard"
-          required
-          fullWidth
-          name="email"
-          label="Email"
-          onChange={formik.handleChange}
-          helperText={formik.errors.email}
-        />
-
-        <Styles.CustomTextField
-          variant="standard"
-          required
-          fullWidth
-          name="password"
-          type={"password"}
-          label={"Password"}
-          onChange={formik.handleChange}
-          helperText={formik.errors.password}
-        />
-        {/*  <Link href="/profile" passHref>
-          <a> */}
-        <Styles.CustomButton
-          variant="contained"
-          type="submit"
-          disabled={formik.isSubmitting}
-          /* onClick={(e) => {
-            {
-              e.preventDefault(), router.replace("/");
-            }
-          }} */
+    <>
+      <Styles.LoginWrapper>
+        <Typography
+          component="h2"
+          variant="h3"
+          align="center"
+          fontWeight="bold"
+          color="tertiary"
+          marginBottom={"15px"}
         >
-          {formik.isSubmitting ? "Enviando..." : "Enviar"}
-        </Styles.CustomButton>
-        {/*  </a>
-        </Link> */}
-      </Styles.CustomForm>
-    </Styles.LoginWrapper>
+          Login
+        </Typography>
+        <Styles.CustomForm onSubmit={formik.handleSubmit}>
+          <Styles.CustomTextField
+            variant="standard"
+            required
+            fullWidth
+            name="email"
+            label="Email"
+            onChange={formik.handleChange}
+            helperText={formik.errors.email}
+          />
+          {formik.isSubmitting ? (
+            <Stack>
+              <Alert severity="success">Loading...</Alert>
+            </Stack>
+          ) : (
+            ""
+          )}
+          {open ? (
+            <Stack>
+              <Alert severity="warning">
+                <AlertTitle>Warning!</AlertTitle>
+                Incorrect email or password, please try again or{" "}
+                <Link href="/register">
+                  <a>Register</a>
+                </Link>
+              </Alert>
+            </Stack>
+          ) : null}
+          <Styles.CustomTextField
+            variant="standard"
+            required
+            fullWidth
+            name="password"
+            type={"password"}
+            label={"Password"}
+            onChange={formik.handleChange}
+            helperText={formik.errors.password}
+          />
+          <Styles.CustomButton
+            variant="contained"
+            type="submit"
+            disabled={formik.isSubmitting}
+          >
+            {formik.isSubmitting ? "Enviando..." : "Enviar"}
+          </Styles.CustomButton>
+        </Styles.CustomForm>
+      </Styles.LoginWrapper>
+    </>
   );
 }

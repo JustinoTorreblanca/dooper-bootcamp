@@ -11,7 +11,6 @@ export const MenuListContainer = styled("div")<MenuListContainerProps>`
   right: 0;
   left: 0;
   display: ${(props) => props.display};
-  position: absolute;
   border-top: 2px solid ${theme.palette.grey[600]};
   background-color: white;
   padding: 16px;

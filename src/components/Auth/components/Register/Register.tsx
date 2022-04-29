@@ -1,10 +1,9 @@
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as Yup from "yup";
-import { Typography } from "@mui/material";
-import { useAuth } from "@src/contexts/AuthContext";
+import { Alert, AlertTitle, Stack, Typography } from "@mui/material";
 import { supabase } from "@src/utils/supabaseClient";
 import * as Styles from "./styles";
 
@@ -31,16 +30,14 @@ const ValidateFormSchema = Yup.object().shape({
       "Must contain at least one !@#$%^&* special character"
     )
 });
-const redirectToProfile = "/profile";
+
 export default function Register() {
-  const [error, setError] = useState("");
-  const [userRegistered, setUserRegistered] = useState({});
-  const { authUser, session } = useAuth();
+  const [handleRegisterError, setHandleRegisterError] = useState<object>();
+  const [successRegister, setSuccessRegister] = useState(false);
+
   const router = useRouter();
-  //console.log(authUser, session);
 
   const handleRegister = async (value: any) => {
-    setError("");
     const { user, session, error } = await supabase.auth.signUp(
       {
         email: formik.values.email,
@@ -52,19 +49,22 @@ export default function Register() {
           lastName: formik.values.lastName,
           phone: formik.values.phoneNumber
         }
-        //redirectTo: (window.location.href = redirectToProfile)
       }
     );
 
     if (error) {
-      setError(error.message);
+      setHandleRegisterError(error);
     }
 
     if (user) {
-      // redirigir a la ruta profile
+      setSuccessRegister(true);
       router.push("/profile");
     }
   };
+
+  useEffect(() => {
+    setTimeout(() => setSuccessRegister(false), 4000);
+  }, [successRegister]);
 
   const formik = useFormik({
     initialValues: {
@@ -151,6 +151,27 @@ export default function Register() {
         >
           {formik.isSubmitting ? "Enviando..." : "Enviar"}
         </Styles.CustomButton>
+        {formik.isSubmitting ? (
+          <Stack>
+            <Alert severity="success">
+              <AlertTitle>Loading...</AlertTitle>
+            </Alert>
+          </Stack>
+        ) : null}
+        {handleRegisterError ? (
+          <Stack>
+            <Alert severity="error">
+              <AlertTitle>{handleRegisterError}</AlertTitle>
+            </Alert>
+          </Stack>
+        ) : null}
+        {successRegister ? (
+          <Stack>
+            <Alert severity="success">
+              <AlertTitle>You have been registered successfully!</AlertTitle>
+            </Alert>
+          </Stack>
+        ) : null}
       </Styles.CustomForm>
     </Styles.RegisterWrapper>
   );

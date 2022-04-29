@@ -10,7 +10,7 @@ export const CustomContainer = styled(Container)`
 
 export const InnerContainer = styled(Container)`
   border: 2px solid ${theme.palette.grey[600]};
-  min-height: 80vh;
+  min-height: 120vh;
   display: flex;
   justify-content: center;
   align-items: self-start;
