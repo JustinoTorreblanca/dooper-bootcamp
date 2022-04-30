@@ -5,6 +5,7 @@ import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import Layout from "@src/components/Layout";
+import { AuthProvider } from "@src/contexts/AuthContext";
 import createEmotionCache from "../src/createEmotionCache";
 import theme from "../src/theme";
 
@@ -34,9 +35,11 @@ export default function MyApp(props: MyAppProps) {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <AuthProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </AuthProvider>
       </ThemeProvider>
     </CacheProvider>
   );

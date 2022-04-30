@@ -18,9 +18,10 @@ export const CustomForm = styled("form")`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 300px;
+  min-height: 300px;
 `;
 
 export const CustomButton = styled(Button)`
-  width: 81px;
+  width: 110px;
+  height: 37px;
 `;

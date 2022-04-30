@@ -11,7 +11,7 @@ export const Element = styled(Box)`
 `;
 
 export const CustomTextField = styled(TextField)`
-  margin: 0 0 15px;
+  margin: 0 0 10px;
 `;
 
 export const ProfilePhoto = styled(Box)`
@@ -20,4 +20,12 @@ export const ProfilePhoto = styled(Box)`
   width: 130px;
   border-radius: 50%;
   margin: 0px 0px 20px;
+`;
+
+export const CustomForm = styled("form")`
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 400px;
 `;

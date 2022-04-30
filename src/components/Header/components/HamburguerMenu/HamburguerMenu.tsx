@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import * as React from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
@@ -11,7 +11,7 @@ type HamburguerMenuProps = {
   open: boolean;
 };
 
-function HamburguerMenu({ handleToggle, open }: HamburguerMenuProps) {
+const HamburguerMenu = ({ handleToggle, open }: HamburguerMenuProps) => {
   return (
     <>
       <Box display={{ sm: "block", md: "none" }}>
@@ -45,6 +45,6 @@ function HamburguerMenu({ handleToggle, open }: HamburguerMenuProps) {
       </Box>
     </>
   );
-}
+};
 
 export default HamburguerMenu;

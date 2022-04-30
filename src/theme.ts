@@ -138,6 +138,13 @@ const theme = createTheme({
           padding: "16px"
         }
       }
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          color: "#E94560"
+        }
+      }
     }
   },
   spacing: 8,
