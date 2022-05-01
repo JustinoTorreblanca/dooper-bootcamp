@@ -3,14 +3,8 @@ import Link from "next/link";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
-import {
-  Alert,
-  AlertTitle,
-  Box,
-  Button,
-  Stack,
-  Typography
-} from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import CustomAlert from "@src/components/CustomAlert";
 import { useAuth } from "@src/contexts/AuthContext";
 import PrivateComponent from "@src/utils/PrivateComponent";
 import { supabase } from "@src/utils/supabaseClient";
@@ -26,6 +20,10 @@ type UserProfileProps = {
   photo_url: string;
 };
 
+type AlertProps = {
+  type: "success" | "info" | "warning" | "error";
+  message: string;
+};
 const ValidateFormSchema = Yup.object().shape({
   first_name: Yup.string().matches(
     new RegExp(/^[a-z ,.'-]+$/i),
@@ -56,6 +54,10 @@ export default function Profile() {
   const [getProfileError, setGetProfileError] = useState();
   const [handleUpdateError, setHandleUpdateError] = useState<string>();
   const [successAlert, setSuccessAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState<AlertProps>({
+    type: "success",
+    message: ""
+  });
 
   const getProfile = async () => {
     const user = await supabase.auth.user();
@@ -66,8 +68,7 @@ export default function Profile() {
       .maybeSingle();
 
     if (error) {
-      setGetProfileError(getProfileError);
-
+      setGetProfileError(error);
       return;
     }
 
@@ -91,12 +92,36 @@ export default function Profile() {
       .maybeSingle();
 
     if (error) {
-      setHandleUpdateError(error.message);
+      setHandleUpdateError(error);
       return;
     }
-    setSuccessAlert(true);
     setProfile(data);
+    setSuccessAlert(true);
   };
+
+  useEffect(() => {
+    if (getProfileError) {
+      setAlertMessage({ type: "error", message: `${getProfileError}` });
+      return;
+    }
+    if (handleUpdateError) {
+      setAlertMessage({ type: "error", message: `${handleUpdateError}` });
+      return;
+    }
+    if (successAlert && profile) {
+      setAlertMessage({
+        type: "success",
+        message: "Your profile has been updated."
+      });
+      return;
+    }
+  }, [
+    getProfileError,
+    handleUpdateError,
+    alertMessage.type,
+    successAlert,
+    profile
+  ]);
 
   useEffect(() => {
     setTimeout(() => setSuccessAlert(false), 5000);
@@ -187,29 +212,14 @@ export default function Profile() {
               helperText={formik.errors.photo_url}
             />
           </Styles.CustomForm>
-
-          {getProfileError ? (
-            <Stack>
-              <Alert severity="error">
-                <AlertTitle>{getProfileError}</AlertTitle>
-              </Alert>
-            </Stack>
-          ) : null}
-          {handleUpdateError ? (
-            <Stack>
-              <Alert severity="error">
-                <AlertTitle>{handleUpdateError}</AlertTitle>
-              </Alert>
-            </Stack>
+          {console.log(getProfileError, handleUpdateError, successAlert)}
+          {getProfileError || handleUpdateError || successAlert ? (
+            <CustomAlert
+              severity={alertMessage.type}
+              message={alertMessage.message}
+            />
           ) : null}
           <Button onClick={formik.submitForm}>Update my profile</Button>
-          {successAlert ? (
-            <Stack>
-              <Alert severity="success">
-                <AlertTitle>Your profile has been updated.</AlertTitle>
-              </Alert>
-            </Stack>
-          ) : null}
         </Box>
       </Styles.Element>
     </PrivateComponent>
