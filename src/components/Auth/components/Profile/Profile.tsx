@@ -51,7 +51,7 @@ const ValidateFormSchema = Yup.object().shape({
 export default function Profile() {
   const { logout, user } = useAuth();
   const [profile, setProfile] = useState<UserProfileProps>();
-  const [getProfileError, setGetProfileError] = useState();
+  const [getProfileError, setGetProfileError] = useState<string>();
   const [handleUpdateError, setHandleUpdateError] = useState<string>();
   const [successAlert, setSuccessAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState<AlertProps>({
@@ -68,7 +68,7 @@ export default function Profile() {
       .maybeSingle();
 
     if (error) {
-      setGetProfileError(error);
+      setGetProfileError(error.message);
       return;
     }
 
@@ -92,7 +92,7 @@ export default function Profile() {
       .maybeSingle();
 
     if (error) {
-      setHandleUpdateError(error);
+      setHandleUpdateError(error.message);
       return;
     }
     setProfile(data);
@@ -212,7 +212,6 @@ export default function Profile() {
               helperText={formik.errors.photo_url}
             />
           </Styles.CustomForm>
-          {console.log(getProfileError, handleUpdateError, successAlert)}
           {getProfileError || handleUpdateError || successAlert ? (
             <CustomAlert
               severity={alertMessage.type}

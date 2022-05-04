@@ -47,7 +47,7 @@ export default function Login() {
     }
 
     if (user) {
-      router.push("/profile");
+      router.push("/products");
     }
   };
 
