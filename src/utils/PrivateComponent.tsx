@@ -14,7 +14,7 @@ const PrivateComponent: React.FC<PrivateRouteProps> = (props) => {
         props.children
       ) : (
         <p>
-          Cannot access to Profile, please
+          Cannot access to this page, please
           <Link href="/login">
             <a> Login </a>
           </Link>

@@ -11,7 +11,8 @@ import * as Styles from "./styles";
 const ValidateFormSchema = Yup.object().shape({
   email: Yup.string()
     .min(5, "Username must have min 5 characters")
-    .required("Username is required"),
+    .required("Username is required")
+    .email(),
   password: Yup.string()
     .min(6, "Password must have min 6 characters")
     .max(10, "Password allows max 10 characters")
@@ -30,7 +31,7 @@ const ValidateFormSchema = Yup.object().shape({
 
 export default function Login() {
   const [error, setError] = useState("");
-  const [open, setOpen] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
 
   const router = useRouter();
 
@@ -41,12 +42,12 @@ export default function Login() {
     });
     if (error) {
       setError(error.message);
-      setOpen(!open);
+      setOpenAlert(!openAlert);
       return;
     }
 
     if (user) {
-      router.push("/profile");
+      router.push("/products");
     }
   };
 
@@ -89,7 +90,7 @@ export default function Login() {
           ) : (
             ""
           )}
-          {open ? (
+          {openAlert ? (
             <Stack>
               <Alert severity="warning">
                 <AlertTitle>Warning!</AlertTitle>

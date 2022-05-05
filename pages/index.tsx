@@ -1,11 +1,8 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { useAuth } from "@src/contexts/AuthContext";
 
 const Home: NextPage = () => {
-  const { session } = useAuth();
-
   return (
     <div>
       <Head>
@@ -21,17 +18,15 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        {!session && (
-          <>
-            <h1>Welcome to:</h1>
-            <Image
-              src="/assets/logo-dooper.png"
-              alt="dooper"
-              width="200px"
-              height="100px"
-            />
-          </>
-        )}
+        <>
+          <h1>Welcome to:</h1>
+          <Image
+            src="/assets/logo-dooper.png"
+            alt="dooper"
+            width="200px"
+            height="100px"
+          />
+        </>
       </main>
 
       <footer></footer>
