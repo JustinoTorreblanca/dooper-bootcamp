@@ -1,5 +1,4 @@
 import { supabaseClient } from "@supabase/supabase-auth-helpers/nextjs";
-import { User, useUser } from "@supabase/supabase-auth-helpers/react";
 import { useQuery } from "react-query";
 import { Product } from "@src/components/ProductsWrapper/ProductCard/ProductCard";
 
@@ -9,43 +8,22 @@ interface UseGetProductsResult {
   isError?: boolean;
   isSuccess?: boolean;
 }
-
-const buildQuery = ({ products }: UseGetProductsResult, user: User) => {
-  let query = supabaseClient.from("products").select("*").eq("id", user?.id);
-
-  return query;
-};
 function useProductsHook() {
-  const { user, error } = useUser();
+  const {
+    data: products,
+    isLoading,
+    isError
+  } = useQuery(["products"], async () => {
+    const { data, error } = await supabaseClient.from("products").select("*");
 
-  const getProducts = async (): Promise<Product | undefined> => {
     if (error) {
       throw error.message;
     }
 
-    console.log(user);
-    if (user) {
-      const query: any = buildQuery({ products }, user);
+    return data;
+  });
 
-      const { data, error } = await query;
-
-      console.log(data);
-      if (error) {
-        throw error;
-      }
-
-      return data;
-    }
-  };
-
-  const {
-    data: products,
-    isLoading,
-    isError,
-    isSuccess
-  } = useQuery(["products", user?.role], () => getProducts());
-
-  return { products, isLoading, isError, isSuccess };
+  return { products, isLoading, isError };
 }
 
 export default useProductsHook;
