@@ -101,11 +101,11 @@ export default function Profile() {
 
   useEffect(() => {
     if (getProfileError) {
-      setAlertMessage({ type: "error", message: `${getProfileError}` });
+      setAlertMessage({ type: "error", message: getProfileError });
       return;
     }
     if (handleUpdateError) {
-      setAlertMessage({ type: "error", message: `${handleUpdateError}` });
+      setAlertMessage({ type: "error", message: handleUpdateError });
       return;
     }
     if (successAlert && profile) {
