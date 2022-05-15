@@ -54,7 +54,6 @@ export default function MyApp(props: MyAppProps) {
               </Layout>
             </AuthProvider>
           </UserProvider>
-          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         </QueryClientProvider>
       </ThemeProvider>
     </CacheProvider>
