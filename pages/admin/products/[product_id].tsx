@@ -17,15 +17,34 @@ export default function AdminSingleProductPage(props: Product) {
 
   if (products?.length === 0 || products === undefined) {
     return (
-      <>
+      <Box display="flex" flexDirection="column" gap="30px">
         <CustomAlert
           severity="error"
           message="This product does not exist, please try again."
         />
-        <Button onClick={router.back} variant="contained">
-          Go back
-        </Button>
-      </>
+        <Box
+          display="flex"
+          flexDirection="column"
+          textAlign="center"
+          gap="10px"
+        >
+          <Box>
+            <Button onClick={router.back} variant="contained" color="primary">
+              Go back
+            </Button>
+          </Box>
+          or
+          <Box>
+            <Button
+              onClick={() => router.push("/admin/products/new")}
+              variant="contained"
+              color="success"
+            >
+              Create new product
+            </Button>
+          </Box>
+        </Box>
+      </Box>
     );
   }
   if (products?.length !== 0) {

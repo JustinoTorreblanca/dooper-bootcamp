@@ -26,10 +26,6 @@ const AdminProducts = () => {
     return <CustomAlert severity="success" message="Loading..." />;
   }
 
-  const pushItem = () => {
-    router.push(`/admin/products/${itemId}`);
-  };
-
   return (
     <PrivateComponent requiredPermission={user}>
       <Box

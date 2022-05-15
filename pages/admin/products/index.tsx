@@ -12,7 +12,7 @@ export default function AdminProductsPage() {
         marginBottom="15px"
         color={theme?.palette?.primary.dark}
       >
-        Click on a product to delete it
+        Click on the product you want to delete
       </Typography>
       <AdminProducts />;
     </Box>
