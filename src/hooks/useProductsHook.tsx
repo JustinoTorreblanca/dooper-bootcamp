@@ -8,13 +8,30 @@ interface UseGetProductsResult {
   isError?: boolean;
   isSuccess?: boolean;
 }
-function useProductsHook() {
+
+type useProductHookProps = {
+  userId?: string;
+  product_id?: string;
+};
+
+function useProductsHook(props: useProductHookProps) {
   const {
     data: products,
     isLoading,
-    isError
-  } = useQuery(["products"], async () => {
-    const { data, error } = await supabaseClient.from("products").select("*");
+    isError,
+    isSuccess
+  } = useQuery(["products", props.userId, props.product_id], async () => {
+    const query = supabaseClient.from("products").select("*");
+
+    if (props.userId) {
+      query.eq("created_by", props.userId);
+    }
+
+    if (props.product_id) {
+      query.eq("id", props.product_id);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       throw error.message;
@@ -22,8 +39,7 @@ function useProductsHook() {
 
     return data;
   });
-
-  return { products, isLoading, isError };
+  return { products, isLoading, isError, isSuccess };
 }
 
 export default useProductsHook;
