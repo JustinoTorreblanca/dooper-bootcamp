@@ -1,19 +1,22 @@
 import { useRouter } from "next/router";
+import { useQueryClient } from "react-query";
 import { Button } from "@mui/material";
 import { Box } from "@mui/system";
 import CustomAlert from "@src/components/CustomAlert";
 import ProductCard from "@src/components/ProductsWrapper/ProductCard";
 import { Product } from "@src/components/ProductsWrapper/ProductCard/ProductCard";
+import useCRUDProduct from "@src/hooks/useCRUDProduct";
 import useProductsHook from "@src/hooks/useProductsHook";
 import { supabase } from "@src/utils/supabaseClient";
 
 export default function AdminSingleProductPage(props: Product) {
   const router = useRouter();
-
+  const queryClient = useQueryClient();
   const { product_id } = router.query;
-  const { products } = useProductsHook({
+  const { products, isSuccess } = useProductsHook({
     product_id: product_id as string
   });
+  const { productDelete } = useCRUDProduct();
 
   if (products?.length === 0 || products === undefined) {
     return (
@@ -28,7 +31,7 @@ export default function AdminSingleProductPage(props: Product) {
       </>
     );
   }
-  if (products?.length !== 0) {
+  if (isSuccess) {
     <CustomAlert severity="success" message="Loading..." />;
   }
   const [{ title, description, image, price, id }] = products;
@@ -40,7 +43,8 @@ export default function AdminSingleProductPage(props: Product) {
       .eq("id", products?.[0].id)
       .maybeSingle();
 
-    await router.reload();
+    productDelete;
+    router.back();
     if (product_id === undefined) {
       <CustomAlert
         severity="success"

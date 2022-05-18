@@ -1,4 +1,5 @@
 import { useFormik } from "formik";
+import { useRouter } from "next/router";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
@@ -11,21 +12,19 @@ const CreateNewProduct = () => {
     id: Yup.number().required("Product id is required"),
     title: Yup.string().required("Product title is required"),
     price: Yup.number().required("Product price is required"),
-    description: Yup.string().required("Product description is required"),
-    image: Yup.string()
-      .required("Product image is required, valid formats:jpg, jpeg, png")
-      .matches(
-        new RegExp(/(\.(jpg|jpeg|png))/i),
-        "Pleas enter a valid image format"
-      )
+    description: Yup.string().required("Product description is required")
   });
 
   const [handleNewProductError, setHandleNewProductError] = useState<object>();
   const [newProductUploadSuccess, setNewProductUploadSuccess] = useState(false);
+  const router = useRouter();
+  const { product_id } = router.query;
   const { productMutate } = useCRUDProduct();
 
-  const handleCreateProduct = async (values: any) => {
+  const handleCreateProduct = (values: any) => {
     productMutate.mutate(values);
+    setNewProductUploadSuccess(true);
+    router.reload();
   };
 
   const formik = useFormik({
@@ -33,15 +32,16 @@ const CreateNewProduct = () => {
       id: "",
       title: "",
       description: "",
-      price: "",
-      image: ""
+      price: ""
     },
     validationSchema: ValidateFormSchema,
     onSubmit: handleCreateProduct
   });
 
   useEffect(() => {
-    setTimeout(() => setNewProductUploadSuccess(false), 4000);
+    if (newProductUploadSuccess) {
+      setTimeout(() => setNewProductUploadSuccess(false), 4000);
+    }
   }, [newProductUploadSuccess]);
 
   return (
@@ -96,16 +96,6 @@ const CreateNewProduct = () => {
           label="Product price"
           onChange={formik.handleChange}
           helperText={formik.errors.price}
-        />
-        <Styles.CustomTextField
-          variant="standard"
-          required
-          fullWidth
-          name="image"
-          type="file"
-          label="Product image"
-          onChange={formik.handleChange}
-          helperText={formik.errors.image}
         />
 
         <Styles.CustomButton

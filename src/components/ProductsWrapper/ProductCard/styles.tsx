@@ -5,7 +5,7 @@ export const ProductCardContainer = styled(Box)`
   display: flex;
   flex-direction: column;
   gap: 15px;
-  min-height: 300px;
+  min-height: 456px;
   max-height: 512px;
   max-width: 300px;
   padding: 10px;

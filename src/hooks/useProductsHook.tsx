@@ -18,7 +18,8 @@ function useProductsHook(props: useProductHookProps) {
   const {
     data: products,
     isLoading,
-    isError
+    isError,
+    isSuccess
   } = useQuery(["products", props.userId, props.product_id], async () => {
     const query = supabaseClient.from("products").select("*");
 
@@ -38,7 +39,7 @@ function useProductsHook(props: useProductHookProps) {
 
     return data;
   });
-  return { products, isLoading, isError };
+  return { products, isLoading, isError, isSuccess };
 }
 
 export default useProductsHook;
